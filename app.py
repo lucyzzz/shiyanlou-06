@@ -13,10 +13,11 @@ def not_found(error):
 @app.route('/')
 def index():
     title_list = []
-    for filename in os.listdir(): #迭代目录下的文件
+    path = "/home/shiyanlou/files/"
+    for filename in os.listdir(path): #迭代目录下的文件
         name ,ext =os.path.splitext(filename)  #获取文件后缀
         if ext == '.json':    #如果后缀为.json
-            with open(filename) as file:
+            with open(path+filename) as file:
                 dict = json.load(file)
                 title_list.append(dict['title'])
     return render_template("index.html",title_list=title_list)
@@ -26,8 +27,9 @@ def index():
 
 @app.route('/files/<filename>')
 def file(filename):
+    path = "/home/shiyanlou/files/"
     default_suffix = '.json'
-    filename = filename+default_suffix
+    filename = path+filename+default_suffix
     if not os.path.isfile(filename):
         return not_found(404)
     with open(filename) as file:
